@@ -11,6 +11,12 @@ import {
 } from "lucide-react";
 
 const Hero = () => {
+
+  function findBusinessesSection(){
+    const findBusinesses = document.getElementById('findBusinesses');
+    findBusinesses?.scrollIntoView({behavior: "smooth"})
+  }
+
   const stats = [
     { icon: Building2, number: "10,000+", label: "Registered Businesses" },
     { icon: Users, number: "50,000+", label: "Happy Customers" },
@@ -42,13 +48,15 @@ const Hero = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 mb-12">
-              <button className="bg-white hover:bg-gray-100 text-blue-900 px-8 py-4 rounded-lg font-semibold text-lg transition-all transform hover:scale-105 flex items-center justify-center space-x-2">
+              <button onClick={findBusinessesSection} className="bg-white hover:bg-gray-100 text-blue-900 px-8 py-4 rounded-lg font-semibold text-lg transition-all transform hover:scale-105 flex items-center justify-center space-x-2">
                 <span>Find Businesses</span>
                 <ArrowRight className="h-5 w-5" />
               </button>
+              <Link to="/register-business">
               <button className="border-2 border-white text-white hover:bg-white hover:text-blue-900 px-8 py-4 rounded-lg font-semibold text-lg transition-all transform hover:scale-105">
-                <Link to="/register-business">Register Your Business</Link>
+                Register Your Business
               </button>
+              </Link>
             </div>
 
             {/* Stats */}

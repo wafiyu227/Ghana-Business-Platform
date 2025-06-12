@@ -33,7 +33,7 @@ const SearchComponent = () => {
   ];
 
   return (
-    <div className="bg-gradient-to-r from-blue-50 to-gray-50 py-8">
+    <div className="bg-gradient-to-r from-blue-50 to-gray-50 py-8" id='findBusinesses'>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-6">
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Find Local Businesses</h2>

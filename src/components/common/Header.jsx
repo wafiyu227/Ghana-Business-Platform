@@ -5,7 +5,7 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="bg-white shadow-lg sticky top-0 z-50 border-b border-gray-200">
+    <header className="bg-white shadow-lg sticky top-0 z-10 border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -40,25 +40,27 @@ const Header = () => {
             >
               Categories
             </a>
-            <a
-              href="#"
+            <Link
+              to="/signup"
               className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-bold transition-colors"
             >
-              About
-            </a>
-            <a
-              href="#"
+              Signup
+            </Link>
+            <Link
+              to="/login"
               className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-bold transition-colors"
             >
-              Contact
-            </a>
+              Login
+            </Link>
           </nav>
 
           {/* CTA Button */}
           <div className="hidden md:flex items-center space-x-4">
+          <Link to="/register-business">
             <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-              <Link to="/register-business">Register Business</Link>
+              Register Business
             </button>
+            </Link>
           </div>
 
           {/* Mobile menu button */}
@@ -98,21 +100,23 @@ const Header = () => {
               >
                 Categories
               </a>
-              <a
-                href="#"
+              <Link
+                to="/signup"
                 className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-bold"
               >
-                About
-              </a>
-              <a
-                href="#"
+                Signup
+              </Link>
+              <Link
+                to="/login"
                 className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-bold"
               >
-                Contact
-              </a>
+                Login
+              </Link>
+              <Link to="/register-business">
               <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium mx-3 transition-colors">
                 Register Business
               </button>
+              </Link>
             </div>
           </div>
         )}
