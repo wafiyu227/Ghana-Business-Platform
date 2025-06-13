@@ -42,33 +42,21 @@ function SignupForm () {
     setIsLoading(true);
   
     try {
-      // Sign up user with Supabase
+      // Sign up user with Supabase, including profile data in metadata
       const { data, error } = await supabase.auth.signUp({
         email: formData.email,
-        password: formData.password
+        password: formData.password,
+        options: {
+          data: {
+            first_name: formData.firstName,
+            last_name: formData.lastName,
+            business_name: formData.businessName,
+          }
+        }
       });
   
       if (error) {
         throw error;
-      }
-  
-      const userId = data.user?.id;
-  
-      // Insert profile data
-      if (userId) {
-        const { error: profileError } = await supabase
-          .from('profiles')
-          .insert([
-            {
-              id: userId,
-              email: formData.email,
-              first_name: formData.firstName,
-              last_name: formData.lastName, // <--- renamed this
-              business_name: formData.businessName,
-            },
-          ]);
-  
-        if (profileError) throw profileError;
       }
   
       alert('Signup successful! Please check your email to verify.');
