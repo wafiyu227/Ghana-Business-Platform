@@ -11,10 +11,9 @@ import {
 } from "lucide-react";
 
 const Hero = () => {
-
-  function findBusinessesSection(){
-    const findBusinesses = document.getElementById('findBusinesses');
-    findBusinesses?.scrollIntoView({behavior: "smooth"})
+  function findBusinessesSection() {
+    const findBusinesses = document.getElementById("findBusinesses");
+    findBusinesses?.scrollIntoView({ behavior: "smooth" });
   }
 
   const stats = [
@@ -48,14 +47,17 @@ const Hero = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 mb-12">
-              <button onClick={findBusinessesSection} className="bg-white hover:bg-gray-100 text-blue-900 px-8 py-4 rounded-lg font-semibold text-lg transition-all transform hover:scale-105 flex items-center justify-center space-x-2">
-                <span>Find Businesses</span>
-                <ArrowRight className="h-5 w-5" />
+              <button
+                onClick={findBusinessesSection}
+                className="w-1/2 sm:w-auto bg-white hover:bg-gray-100 text-blue-900 px-8 py-4 rounded-lg font-semibold text-lg transition-all transform hover:scale-105 flex items-center justify-center space-x-2"
+              >
+                Find Businesses
+                <ArrowRight className="h-5 w-5 ml-1" />
               </button>
               <Link to="/register-business">
-              <button className="border-2 border-white text-white hover:bg-white hover:text-blue-900 px-8 py-4 rounded-lg font-semibold text-lg transition-all transform hover:scale-105">
-                Register Your Business
-              </button>
+                <button className="border-2 border-white text-white hover:bg-white hover:text-blue-900 px-8 py-4 rounded-lg font-semibold text-lg transition-all transform hover:scale-105">
+                  Register Your Business
+                </button>
               </Link>
             </div>
 

@@ -62,11 +62,6 @@ export default function BusinessRegistration() {
     instagram: "",
     linkedin: "",
 
-    // Documents
-    businessCertificate: null,
-    taxClearance: null,
-    businessLicense: null,
-    ownerIdCopy: null,
   });
 
   const steps = [
@@ -75,7 +70,6 @@ export default function BusinessRegistration() {
     { id: 3, title: "Location", icon: MapPin },
     { id: 4, title: "Owner Info", icon: User },
     { id: 5, title: "Operations", icon: FileText },
-    { id: 6, title: "Documents", icon: Upload },
   ];
 
   const regions = [
@@ -128,12 +122,9 @@ export default function BusinessRegistration() {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleFileUpload = (field, file) => {
-    setFormData((prev) => ({ ...prev, [field]: file }));
-  };
-
+  
   const nextStep = () => {
-    if (currentStep < 6) setCurrentStep(currentStep + 1);
+    if (currentStep < 5) setCurrentStep(currentStep + 1);
   };
 
   const prevStep = () => {
@@ -772,95 +763,6 @@ export default function BusinessRegistration() {
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     placeholder="Who are your target customers? (e.g., individuals, businesses, government, etc.)"
                   />
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Step 6: Documents */}
-          {currentStep === 6 && (
-            <div className="space-y-6">
-              <div className="border-b border-gray-200 pb-4">
-                <h2 className="text-2xl font-bold text-gray-900 flex items-center">
-                  <Upload className="h-6 w-6 mr-3 text-blue-600" />
-                  Required Documents
-                </h2>
-                <p className="text-gray-600 mt-1">
-                  Upload the necessary business documents
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {[
-                  {
-                    key: "businessCertificate",
-                    label: "Business Registration Certificate",
-                    required: true,
-                  },
-                  {
-                    key: "taxClearance",
-                    label: "Tax Clearance Certificate",
-                    required: false,
-                  },
-                  {
-                    key: "businessLicense",
-                    label: "Business Operating License",
-                    required: false,
-                  },
-                  {
-                    key: "ownerIdCopy",
-                    label: "Owner ID/Passport Copy",
-                    required: true,
-                  },
-                ].map((doc) => (
-                  <div
-                    key={doc.key}
-                    className="border-2 border-dashed border-gray-300 rounded-lg p-6 hover:border-blue-400 transition-colors"
-                  >
-                    <div className="text-center">
-                      <Upload className="h-12 w-12 text-gray-400 mx-auto mb-3" />
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">
-                        {doc.label} {doc.required && "*"}
-                      </label>
-                      <input
-                        type="file"
-                        accept=".pdf,.jpg,.jpeg,.png"
-                        onChange={(e) =>
-                          handleFileUpload(doc.key, e.target.files[0])
-                        }
-                        className="hidden"
-                        id={doc.key}
-                      />
-                      <label
-                        htmlFor={doc.key}
-                        className="inline-flex items-center px-4 py-2 bg-green-50 text-blue-700 rounded-lg cursor-pointer hover:bg-green-100 transition-colors"
-                      >
-                        <Camera className="h-4 w-4 mr-2" />
-                        Choose File
-                      </label>
-                      {formData[doc.key] && (
-                        <p className="text-sm text-blue-600 mt-2">
-                          ✓ {formData[doc.key].name}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <div className="flex items-start">
-                  <FileText className="h-5 w-5 text-blue-600 mt-0.5 mr-3" />
-                  <div>
-                    <h4 className="text-sm font-semibold text-blue-900">
-                      Document Requirements
-                    </h4>
-                    <ul className="text-sm text-blue-700 mt-1 space-y-1">
-                      <li>• Files must be in PDF, JPG, or PNG format</li>
-                      <li>• Maximum file size: 5MB per document</li>
-                      <li>• Ensure documents are clear and legible</li>
-                    </ul>
-                  </div>
                 </div>
               </div>
             </div>
