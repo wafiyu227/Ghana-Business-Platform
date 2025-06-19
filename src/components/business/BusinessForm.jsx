@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import {
   Building2,
@@ -12,11 +13,13 @@ import {
   Upload,
   Check,
 } from "lucide-react";
-
-
+import { useBusiness } from "../../../BusinessContext";
 
 export default function BusinessRegistration() {
+  const navigate = useNavigate();
+  const [submitStatus, setSubmitStatus] = useState(''); // For showing success/error messages
   const [currentStep, setCurrentStep] = useState(1);
+  const [ loading, setLoading] = useState(true)
   const [formData, setFormData] = useState({
     // Basic Information
     businessName: "",
@@ -61,7 +64,6 @@ export default function BusinessRegistration() {
     twitter: "",
     instagram: "",
     linkedin: "",
-
   });
 
   const steps = [
@@ -122,7 +124,6 @@ export default function BusinessRegistration() {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  
   const nextStep = () => {
     if (currentStep < 5) setCurrentStep(currentStep + 1);
   };
@@ -131,10 +132,44 @@ export default function BusinessRegistration() {
     if (currentStep > 1) setCurrentStep(currentStep - 1);
   };
 
-  const handleSubmit = (e) => {
+  const { saveBusinessInfo } = useBusiness();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    alert("Business registration submitted successfully!");
+    setSubmitStatus(''); // Clear previous status
+
+    try {
+      console.log("Form submitted:", formData);
+
+      await saveBusinessInfo({
+        businessName: formData.businessName,
+        email: formData.email,
+        contact: formData.phone,
+        social: {
+          facebook: formData.facebook,
+          twitter: formData.twitter,
+          instagram: formData.instagram,
+          linkedin: formData.linkedin,
+        },
+        physicalAddress: formData.physicalAddress,
+        region: formData.region,
+        district: formData.district,
+        town: formData.town,
+        operatingHours: formData.operatingHours,
+        employeeCount: formData.employeeCount,
+      });
+
+      setSubmitStatus('success');
+      
+      // Navigate after a short delay to show success message
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 1500);
+
+    } catch (error) {
+      console.error("Error saving business:", error);
+      setSubmitStatus('error');
+    }
   };
 
   return (
@@ -183,9 +218,7 @@ export default function BusinessRegistration() {
                   </div>
                   <span
                     className={`mt-2 text-sm font-medium ${
-                      currentStep >= step.id
-                        ? "text-blue-600"
-                        : "text-gray-400"
+                      currentStep >= step.id ? "text-blue-600" : "text-gray-400"
                     }`}
                   >
                     {step.title}
@@ -799,11 +832,32 @@ export default function BusinessRegistration() {
               <button
                 type="submit"
                 className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg font-medium hover:from-blue-700 hover:to-blue-800 transition-all transform hover:scale-105"
+                onSubmit={handleSubmit}
               >
                 Submit Registration
               </button>
             )}
           </div>
+           {/* Success/Error Messages */}
+      {submitStatus === 'success' && (
+        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+          ✅ Business registration successful! Redirecting to dashboard...
+        </div>
+      )}
+      
+      {submitStatus === 'error' && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          ❌ Error saving business. Please try again.
+        </div>
+      )}
+
+      <button 
+        type="submit" 
+        disabled={loading}
+        className="your-button-classes"
+      >
+        {loading ? 'Saving...' : 'Register Business'}
+      </button>
         </form>
 
         {/* Help Section */}
