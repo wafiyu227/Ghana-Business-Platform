@@ -3,7 +3,7 @@ import { businessService } from './src/services/businessService'; // Make sure t
 
 const BusinessContext = createContext();
 
-export const BusinessProvider = ({ children }) => {
+function BusinessProvider ({ children })  {
   const [businessData, setBusinessData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -115,3 +115,4 @@ export const useBusiness = () => {
   }
   return context;
 };
+export default BusinessProvider;
