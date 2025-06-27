@@ -1,8 +1,18 @@
 import React, { useState } from "react";
-import { Menu, X, Building2 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Menu, X, Building2, User } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../../context/AuthContext"; // 🔄
+import { supabase } from "../../supabaseClient"; // 🔄
+
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { currentUser, firstName } = useAuth(); // 🔄
+  const navigate = useNavigate(); // 🔄
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    navigate("/");
+  };
 
   return (
     <header className="bg-white shadow-lg sticky top-0 z-10 border-b border-gray-200">
@@ -21,13 +31,13 @@ const Header = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-8">
-            <a
-              href="#"
+          <nav className="hidden md:flex space-x-8 items-center">
+            <Link
+              to="/"
               className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-bold transition-colors"
             >
               Home
-            </a>
+            </Link>
             <a
               href="#"
               className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-bold transition-colors"
@@ -40,28 +50,42 @@ const Header = () => {
             >
               Categories
             </a>
-            <Link
-              to="/signup"
-              className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-bold transition-colors"
-            >
-              Signup
-            </Link>
-            <Link
-              to="/login"
-              className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-bold transition-colors"
-            >
-              Login
-            </Link>
-          </nav>
 
-          {/* CTA Button */}
-          <div className="hidden md:flex items-center space-x-4">
-          <Link to="/register-business">
-            <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-              Register Business
-            </button>
-            </Link>
-          </div>
+            {!currentUser ? (
+              <>
+                <Link
+                  to="/login"
+                  className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-bold transition-colors"
+                >
+                  Login
+                </Link>
+                <Link to="/signup-required">
+                  <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                    Register Business
+                  </button>
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/dashboard"
+                  className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-bold transition-colors"
+                >
+                  Dashboard
+                </Link>
+                <div className="flex items-center space-x-2 bg-gray-100 px-3 py-1 rounded-full">
+                  <User className="h-4 w-4 text-gray-600" />
+                  <span className="text-sm text-gray-700">{firstName}</span>
+                  <button
+                    onClick={handleLogout}
+                    className="text-red-500 text-xs ml-2 hover:underline"
+                  >
+                    Logout
+                  </button>
+                </div>
+              </>
+            )}
+          </nav>
 
           {/* Mobile menu button */}
           <div className="md:hidden">
@@ -82,12 +106,12 @@ const Header = () => {
         {isMenuOpen && (
           <div className="md:hidden border-t border-gray-200 py-4">
             <div className="flex flex-col space-y-3">
-              <a
-                href="#"
+              <Link
+                to="/"
                 className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-bold"
               >
                 Home
-              </a>
+              </Link>
               <a
                 href="#"
                 className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-bold"
@@ -100,23 +124,41 @@ const Header = () => {
               >
                 Categories
               </a>
-              <Link
-                to="/signup"
-                className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-bold"
-              >
-                Signup
-              </Link>
-              <Link
-                to="/login"
-                className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-bold"
-              >
-                Login
-              </Link>
-              <Link to="/register-business">
-              <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium mx-3 transition-colors">
-                Register Business
-              </button>
-              </Link>
+
+              {!currentUser ? (
+                <>
+                  <Link
+                    to="/login"
+                    className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-bold"
+                  >
+                    Login
+                  </Link>
+                  <Link to="/register-business">
+                    <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium mx-3 transition-colors">
+                      Register Business
+                    </button>
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/dashboard"
+                    className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-bold"
+                  >
+                    Dashboard
+                  </Link>
+                  <div className="flex items-center gap-2 px-3">
+                    <User className="h-4 w-4 text-gray-600" />
+                    <span className="text-sm text-gray-700">{firstName}</span>
+                    <button
+                      onClick={handleLogout}
+                      className="text-red-500 text-xs hover:underline"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         )}

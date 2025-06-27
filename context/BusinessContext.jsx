@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, startTransition } from 'react';
-import { businessService } from './src/services/businessService'; // Make sure this path matches your project structure
+import { businessService } from '../src/services/businessService'; // Make sure this path matches your project structure
 
 const BusinessContext = createContext();
 

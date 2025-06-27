@@ -13,13 +13,14 @@ import {
   Upload,
   Check,
 } from "lucide-react";
-import { useBusiness } from "../../../BusinessContext";
+import { useBusiness } from "../../../context/BusinessContext";
+import Header from '../common/Header'
+import Footer from '../common/Footer'
 
 export default function BusinessRegistration() {
   const navigate = useNavigate();
   const [submitStatus, setSubmitStatus] = useState(''); // For showing success/error messages
   const [currentStep, setCurrentStep] = useState(1);
-  const [ loading, setLoading] = useState(true)
   const [formData, setFormData] = useState({
     // Basic Information
     businessName: "",
@@ -173,6 +174,8 @@ export default function BusinessRegistration() {
   };
 
   return (
+    <>
+    <Header />
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-yellow-50">
       {/* Header */}
       <div className="bg-white shadow-lg border-b-4 border-blue-600">
@@ -851,13 +854,7 @@ export default function BusinessRegistration() {
         </div>
       )}
 
-      <button 
-        type="submit" 
-        disabled={loading}
-        className="your-button-classes"
-      >
-        {loading ? 'Saving...' : 'Register Business'}
-      </button>
+      
         </form>
 
         {/* Help Section */}
@@ -895,5 +892,7 @@ export default function BusinessRegistration() {
         </div>
       </div>
     </div>
+    <Footer />
+    </>
   );
 }

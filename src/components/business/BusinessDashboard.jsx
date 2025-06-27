@@ -1,6 +1,6 @@
 import React from "react";
 import { MapPin, Phone, Mail, Clock, Users, Globe } from "lucide-react";
-import { useBusiness } from "../../../BusinessContext"; 
+import { useBusiness } from "../../../context/BusinessContext"; 
 import Header from '../../components/common/Header'
 import Footer from '../../components/common/Footer'
 

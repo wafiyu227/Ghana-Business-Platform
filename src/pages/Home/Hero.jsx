@@ -9,8 +9,11 @@ import {
   MapPin,
   Phone,
 } from "lucide-react";
+import { useAuth } from "../../../context/AuthContext"; // 👈 import
 
 const Hero = () => {
+  const { currentUser } = useAuth(); // 👈 grab current user
+
   function findBusinessesSection() {
     const findBusinesses = document.getElementById("findBusinesses");
     findBusinesses?.scrollIntoView({ behavior: "smooth" });
@@ -54,11 +57,19 @@ const Hero = () => {
                 Find Businesses
                 <ArrowRight className="h-5 w-5 ml-1" />
               </button>
-              <Link to="/register-business">
-                <button className="border-2 border-white text-white hover:bg-white hover:text-blue-900 px-8 py-4 rounded-lg font-semibold text-lg transition-all transform hover:scale-105">
-                  Register Your Business
-                </button>
-              </Link>
+              {currentUser ? (
+                <Link to="/register-business">
+                  <button className="border-2 border-white text-white hover:bg-white hover:text-blue-900 px-8 py-4 rounded-lg font-semibold text-lg transition-all transform hover:scale-105">
+                    Register Your Business
+                  </button>
+                </Link>
+              ) : (
+                <Link to="/signup-required">
+                  <button className="border-2 border-white text-white hover:bg-white hover:text-blue-900 px-8 py-4 rounded-lg font-semibold text-lg transition-all transform hover:scale-105">
+                    Register Your Business
+                  </button>
+                </Link>
+              )}
             </div>
 
             {/* Stats */}

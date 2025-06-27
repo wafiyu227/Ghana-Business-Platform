@@ -1,9 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { supabase } from "../../supabaseClient";
 import Header from '../../components/common/Header'
 import Footer from '../../components/common/Footer'
 function LoginForm() {
+  const navigate = useNavigate()
+  const [redirecting, setRedirecting] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -35,7 +38,13 @@ function LoginForm() {
     } else {
       alert("Login successful!");
       console.log("User info:", data.user);
+
+      setRedirecting(true);
       // You can redirect or update auth context here
+      // Navigate after a short delay to show success message
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 2500);
     }
 
     setIsLoading(false);
@@ -195,6 +204,7 @@ function LoginForm() {
                   </svg>
                   Continue with Google
                 </button>
+                
               </div>
             </div>
           </div>
@@ -210,6 +220,11 @@ function LoginForm() {
               </a>
             </p>
           </div>
+          {redirecting && (
+        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mt-4">
+          ✅ Redirecting to dashboard...
+        </div>
+      )}
         </div>
       </div>
     </div>
