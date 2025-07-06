@@ -4,7 +4,7 @@ import {
   createRoutesFromElements,
   RouterProvider,
 } from "react-router-dom";
-
+import { useParams } from "react-router-dom";
 // Pages
 import BusinessForm from './src/components/business/BusinessForm'
 import Home from "./src/pages/Home/Home";
@@ -12,11 +12,17 @@ import LoginForm from './src/components/auth/Login'
 import SignupForm from './src/components/auth/Signup'
 import BusinessDashboard from './src/components/business/BusinessDashboard'
 import SignupRequiredPage from './src/components/business/SignupRequired'
+import BusinessCard from "./src/components/business/BusinessCard";
+import { BusinessProfile } from './src/pages/BusinessProfile'
+import FeaturedBusinesses from "./src/pages/Home/FeaturedBusinesses";
+import BusinessProfilePage from './src/pages/BusinessProfilePage'; // Adjust path if needed
+
 
 // Auth
 import PrivateRoute from "./src/components/auth/PrivateRoute";
 
 const AppRoutes = () => {
+  const { id } = useParams()
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>
@@ -25,6 +31,11 @@ const AppRoutes = () => {
         <Route path="/login" element={<LoginForm />} />
         <Route path="/signup" element={<SignupForm />} />
         <Route path="/signup-required" element={<SignupRequiredPage />} />
+        <Route path="/business-card" element={<BusinessCard />} />
+        <Route path="/business/:id" element={<BusinessProfile />} />
+        <Route path="/featured-business" element={<FeaturedBusinesses />} />
+        <Route path="/business/" element={<BusinessProfilePage />} />
+
 
         {/* Protected Routes */}
         <Route
