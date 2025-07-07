@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, startTransition } from 'react';
 import { businessService } from '../src/services/businessService'; // Make sure this path matches your project structure
+import { supabase } from '../src/supabaseClient';
 
 const BusinessContext = createContext();
 
@@ -10,17 +11,42 @@ export const BusinessProvider = ({ children }) => {
 
   // Load business data when component mounts
   useEffect(() => {
-    loadBusinessData();
+    const checkAuthAndLoad = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        await loadBusinessData();
+      }
+    };
+  
+    checkAuthAndLoad();
+  
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        if (event === 'SIGNED_IN') {
+          loadBusinessData();
+        }
+        if (event === 'SIGNED_OUT') {
+          clearBusinessData();
+        }
+      }
+    );
+  
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
   }, []);
+  
 
   const loadBusinessData = async () => {
     try {
       setLoading(true);
       setError(null);
+  
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return; // 👈 Prevent fetching if no user
+  
       const data = await businessService.getUserBusiness();
-      
       if (data) {
-        // Transform Supabase data back to your format
         const transformedData = {
           businessName: data.business_name,
           email: data.email,
@@ -38,7 +64,7 @@ export const BusinessProvider = ({ children }) => {
           operatingHours: data.operating_hours,
           employeeCount: data.employee_count,
         };
-        
+  
         startTransition(() => {
           setBusinessData(transformedData);
         });
@@ -50,7 +76,7 @@ export const BusinessProvider = ({ children }) => {
       setLoading(false);
     }
   };
-
+  
   const saveBusinessInfo = async (data) => {
     try {
       setLoading(true);
