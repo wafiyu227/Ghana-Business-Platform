@@ -93,7 +93,7 @@ const FeaturedBusinesses = () => {
 
               {/* View Profile Link */}
               <Link
-                    to={`/business/${business.id}`}
+                    to={`/business/${business.business_name}`}
                     className="w-full flex items-center justify-center space-x-2 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-3 rounded-xl font-medium transition-colors duration-200"
                   >
                     View Full Profile <span><ExternalLink className="w-4 h-4" /></span>

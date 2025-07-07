@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import Header from '../components/common/Header';
+import Footer from '../components/common/Footer';
 import { 
   Phone, 
   MessageCircle, 
@@ -116,7 +118,9 @@ export const BusinessProfile = ({
   const location = [businessData.town, businessData.region].filter(Boolean).join(', ');
 
   return (
-    <div className={`max-w-4xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden ${className}`}>
+    <>
+    <Header />
+    <div className={`max-w-4xl mx-auto my-10 bg-white rounded-3xl shadow-2xl overflow-hidden ${className}`}>
       {/* Hero Section */}
       <div className="relative h-64 bg-gradient-to-br from-green-400 via-blue-500 to-purple-600">
         <div className="absolute inset-0 bg-black bg-opacity-20"></div>
@@ -446,6 +450,8 @@ export const BusinessProfile = ({
         )}
       </div>
     </div>
+    <Footer />
+    </>
   );
 };
 
