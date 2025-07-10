@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Menu, X, Building2, User } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { Menu, X, Building2, User, ChevronDown } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/AuthContext"; // 🔄
 import { supabase } from "../../supabaseClient"; // 🔄
@@ -7,7 +7,24 @@ import { supabase } from "../../supabaseClient"; // 🔄
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { currentUser, firstName } = useAuth(); // 🔄
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
   const navigate = useNavigate(); // 🔄
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  function BrowseCategories() {
+    const categories = document.getElementById("businessCategories");
+    categories?.scrollIntoView({ behavior: "smooth" });
+  }
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -38,18 +55,15 @@ const Header = () => {
             >
               Home
             </Link>
-            <a
-              href="#"
-              className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-bold transition-colors"
-            >
+            <button className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-bold transition-colors">
               Browse Businesses
-            </a>
-            <a
-              href="#"
+            </button>
+            <button
+              onClick={BrowseCategories}
               className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-bold transition-colors"
             >
               Categories
-            </a>
+            </button>
 
             {!currentUser ? (
               <>
@@ -67,21 +81,43 @@ const Header = () => {
               </>
             ) : (
               <>
-                <Link
-                  to="/dashboard"
-                  className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-bold transition-colors"
-                >
-                  Dashboard
-                </Link>
-                <div className="flex items-center space-x-2 bg-gray-100 px-3 py-1 rounded-full">
-                  <User className="h-4 w-4 text-gray-600" />
-                  <span className="text-sm text-gray-700">{firstName}</span>
-                  <button
-                    onClick={handleLogout}
-                    className="text-red-500 text-xs ml-2 hover:underline"
+                <div className="relative" ref={dropdownRef}>
+                  <div
+                    onClick={() => setDropdownOpen(!dropdownOpen)}
+                    className="flex items-center space-x-2 bg-gray-100 px-3 py-1 rounded-full cursor-pointer"
                   >
-                    Logout
-                  </button>
+                    <User className="h-4 w-4 text-gray-600" />
+                    <span className="text-sm text-gray-700">{firstName}</span>
+                    <ChevronDown className="h-4 w-4 text-gray-600" />
+                  </div>
+
+                  {dropdownOpen && (
+                    <div className="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg z-50 border">
+                      <Link
+                        to="/dashboard"
+                        onClick={() => setDropdownOpen(false)}
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        Dashboard
+                      </Link>
+                      <Link
+                        to="/account"
+                        onClick={() => setDropdownOpen(false)}
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        My Account
+                      </Link>
+                      <button
+                        onClick={() => {
+                          handleLogout();
+                          setDropdownOpen(false);
+                        }}
+                        className="block w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-gray-100"
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  )}
                 </div>
               </>
             )}
@@ -119,8 +155,8 @@ const Header = () => {
                 Browse Businesses
               </a>
               <a
-                href="#"
-                className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-bold"
+                onClick={BrowseCategories}
+                className="text-gray-700 cursor-pointer hover:text-blue-600 px-3 py-2 text-sm font-bold"
               >
                 Categories
               </a>
