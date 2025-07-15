@@ -15,6 +15,8 @@ import SignupRequiredPage from './src/components/business/SignupRequired'
 import BusinessCard from "./src/components/business/BusinessCard";
 import { BusinessProfile } from './src/pages/BusinessProfile'
 import FeaturedBusinesses from "./src/pages/Home/FeaturedBusinesses";
+import HowItWorksPage from "./src/pages/HowItWorksPage";
+import AboutUsPage from "./src/pages/AboutUs";
 
 
 // Auth
@@ -33,6 +35,8 @@ const AppRoutes = () => {
         <Route path="/business-card" element={<BusinessCard />} />
         <Route path="/business/:business_name" element={<BusinessProfile />} />
         <Route path="/featured-business" element={<FeaturedBusinesses />} />
+        <Route path="/how-it-works" element={<HowItWorksPage />} />
+        <Route path="/about-us" element={<AboutUsPage />} />
         
 
 
