@@ -57,13 +57,13 @@ const Hero = () => {
                 Find Businesses
                 <ArrowRight className="h-5 w-5 ml-1" />
               </button>
-              {!currentUser && (
+             
                 <Link to="/register-business">
                   <button className="border-2 border-white text-white hover:bg-white hover:text-blue-900 px-8 py-4 rounded-lg font-semibold text-lg transition-all transform hover:scale-105">
                     Register Your Business
                   </button>
                 </Link>
-              ) }
+            
             </div>
 
             {/* Stats */}

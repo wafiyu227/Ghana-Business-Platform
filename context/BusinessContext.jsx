@@ -51,6 +51,9 @@ export const BusinessProvider = ({ children }) => {
           businessName: data.business_name,
           email: data.email,
           contact: data.contact,
+          industry: data.industry,
+          businessDescription: data.business_description,
+          servicesProducts: data.business_services,
           social: {
             facebook: data.facebook,
             twitter: data.twitter,
