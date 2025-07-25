@@ -108,7 +108,7 @@ export default function BusinessRegistration() {
     "Manufacturing",
     "Construction",
     "Retail & Wholesale",
-    "Food & Beverage",
+    'Restaurants & Food',
     "Technology",
     "Healthcare",
     "Education",
@@ -118,6 +118,7 @@ export default function BusinessRegistration() {
     "Real Estate",
     "Professional Services",
     "Entertainment",
+    'Health & Beauty',
     "Other",
   ];
 
