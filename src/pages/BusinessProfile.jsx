@@ -402,8 +402,8 @@ export const BusinessProfile = ({
         </div>
 
         {/* Navigation Tabs */}
-        <div className="border-b overflow-x-auto">
-          <nav className="flex space-x-8 px-6 min-w-max sm:min-w-full">
+        <div className="border-b">
+          <nav className="flex flex-wrap justify-between px-4 sm:px-6 relative">
             {[
               { id: "overview", label: "Overview" },
               { id: "services", label: "Services" },
@@ -413,13 +413,18 @@ export const BusinessProfile = ({
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`py-4 px-2 text-sm font-medium border-b-2 transition-colors duration-200 ${
-                  activeTab === tab.id
-                    ? "border-blue-500 text-blue-600"
-                    : "border-transparent text-gray-500 hover:text-gray-700"
-                }`}
+                className={`relative py-3 px-2 text-sm font-medium transition-colors duration-200
+          ${
+            activeTab === tab.id
+              ? "text-blue-600"
+              : "text-gray-500 hover:text-gray-700"
+          }
+        `}
               >
                 {tab.label}
+                {activeTab === tab.id && (
+                  <span className="absolute left-0 -bottom-1 w-full h-0.5 bg-blue-600 transition-all duration-300 rounded-full"></span>
+                )}
               </button>
             ))}
           </nav>
