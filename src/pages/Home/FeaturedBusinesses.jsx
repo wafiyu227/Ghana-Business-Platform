@@ -165,7 +165,7 @@ const FeaturedBusinesses = () => {
                   to={`/business/${business.business_name}`}
                   className="w-full flex items-center justify-center space-x-2 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-3 rounded-xl font-medium transition-colors duration-200 text-sm"
                 >
-                  View Profile <ExternalLink className="w-3 h-3" />
+                  View Profile &nbsp; <ExternalLink className="w-3 h-3" />
                 </Link>
               </div>
             ))}
