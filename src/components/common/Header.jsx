@@ -55,9 +55,6 @@ const Header = () => {
             >
               Home
             </Link>
-            <button className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-bold transition-colors">
-              Browse Businesses
-            </button>
             <button
               onClick={BrowseCategories}
               className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-bold transition-colors"
@@ -148,12 +145,12 @@ const Header = () => {
               >
                 Home
               </Link>
-              <a
-                href="#"
+              <Link
+                to="/my-account"
                 className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-bold"
               >
-                Browse Businesses
-              </a>
+                My Account
+              </Link>
               <a
                 onClick={BrowseCategories}
                 className="text-gray-700 cursor-pointer hover:text-blue-600 px-3 py-2 text-sm font-bold"
