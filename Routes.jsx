@@ -17,6 +17,7 @@ import { BusinessProfile } from './src/pages/BusinessProfile'
 import FeaturedBusinesses from "./src/pages/Home/FeaturedBusinesses";
 import HowItWorksPage from "./src/pages/HowItWorksPage";
 import AboutUsPage from "./src/pages/AboutUs";
+import Account from "./src/components/business/Account";
 
 
 // Auth
@@ -37,6 +38,7 @@ const AppRoutes = () => {
         <Route path="/featured-business" element={<FeaturedBusinesses />} />
         <Route path="/how-it-works" element={<HowItWorksPage />} />
         <Route path="/about-us" element={<AboutUsPage />} />
+        <Route path="/my-account" element={<Account />} />
         
 
 
