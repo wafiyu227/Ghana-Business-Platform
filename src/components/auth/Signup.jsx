@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Mail, Lock, Eye, EyeOff, User, Building } from 'lucide-react';
+import toast from 'react-hot-toast';
 import { supabase } from '../../supabaseClient';
 import Header from '../../components/common/Header'
 import Footer from '../../components/common/Footer'
@@ -30,12 +31,12 @@ function SignupForm () {
     e.preventDefault();
   
     if (formData.password !== formData.confirmPassword) {
-      alert('Passwords do not match!');
+      toast.error('Passwords do not match!');
       return;
     }
   
     if (!acceptTerms) {
-      alert('Please accept the terms and conditions');
+      toast.error('Please accept the terms and conditions');
       return;
     }
   
@@ -59,7 +60,7 @@ function SignupForm () {
         throw error;
       }
   
-      alert('Signup successful! Please check your email to verify.');
+      toast.success('Signup successful! Please check your email to verify.');
       setFormData({
         firstName: '',
         lastName: '',
@@ -72,7 +73,7 @@ function SignupForm () {
   
     } catch (err) {
       console.error('Signup error:', err.message);
-      alert(err.message);
+      toast.error(err.message);
     } finally {
       setIsLoading(false);
     }
@@ -87,7 +88,7 @@ function SignupForm () {
   
     if (error) {
       console.error('Google login error:', error.message);
-      alert('Google login failed.');
+      toast.error('Google login failed.');
     }
   };
   

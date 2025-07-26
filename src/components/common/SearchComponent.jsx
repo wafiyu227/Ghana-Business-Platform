@@ -199,7 +199,7 @@ const SearchComponent = () => {
                 list="location-options"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
-                placeholder="Type or select a location"
+                placeholder="Location"
                 className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
               />
               <datalist id="location-options">
@@ -214,7 +214,7 @@ const SearchComponent = () => {
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
+                className="w-full px-3 py-3 border cursor-pointer border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
               >
                 {categories.map((cat, index) => (
                   <option key={index} value={cat}>
