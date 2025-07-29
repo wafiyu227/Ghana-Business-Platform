@@ -1,5 +1,6 @@
 import React from 'react';
 import { Building2, MapPin, Phone, Mail, Facebook, Twitter, Instagram } from 'lucide-react';
+import { Link } from 'react-router-dom'
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -36,9 +37,9 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4 text-white">Quick Links</h3>
             <ul className="space-y-2">
-              <li><a href="about-us" className="text-gray-400 hover:text-white transition-colors">About Us</a></li>
-              <li><a href="/how-it-works" className="text-gray-400 hover:text-white transition-colors">How It Works</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Pricing</a></li>
+              <li><Link to="about-us" className="text-gray-400 hover:text-white transition-colors">About Us</Link></li>
+              <li><Link to="/how-it-works" className="text-gray-400 hover:text-white transition-colors">How It Works</Link></li>
+              <li><Link to="/pricing" className="text-gray-400 hover:text-white transition-colors">Pricing</Link></li>
               <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Blog</a></li>
               <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Success Stories</a></li>
             </ul>

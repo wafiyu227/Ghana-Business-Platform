@@ -5,6 +5,7 @@ import Footer from "../../components/common/Footer";
 import React from "react";
 import FeaturedBusinesses from "./FeaturedBusinesses";
 import BrowseByCategory from './BrowseByCategory'
+import PricingComponent from './pricing'
 
 function Home() {
   return (
@@ -13,6 +14,7 @@ function Home() {
       <Hero />
       <SearchComponent />
       <FeaturedBusinesses />
+      <PricingComponent />
       <BrowseByCategory />
       <Footer />
     </>
