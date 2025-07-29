@@ -114,23 +114,6 @@ export const BusinessProfile = ({
     }
   };
 
-  const currentTime = new Date();
-  const currentHour = currentTime.getHours();
-  const currentDay = currentTime.getDay();
-
-  const isCurrentlyOpen = (() => {
-    if (!business?.operating_hours) return false;
-    const hours = business.operating_hours.toLowerCase();
-    if (hours.includes("mon-sat") || hours.includes("monday-saturday")) {
-      return (
-        currentDay >= 1 &&
-        currentDay <= 6 &&
-        currentHour >= 8 &&
-        currentHour < 18
-      );
-    }
-    return false;
-  })();
 
   const handleWhatsAppClick = () => {
     const number = business?.contact;
@@ -279,7 +262,7 @@ export const BusinessProfile = ({
     <>
       <Header />
       <div
-        className={`max-w-4xl mx-auto my-10 bg-white rounded-3xl shadow-2xl overflow-hidden ${className}`}
+        className={`max-w-6xl mx-auto my-10 bg-white rounded-3xl  overflow-hidden ${className}`}
       >
         {/* Hero Section */}
         <div className="relative h-64 bg-gradient-to-br from-green-400 via-blue-500 to-purple-600">
@@ -334,17 +317,6 @@ export const BusinessProfile = ({
                   {business.operating_hours || "Hours not specified"}
                 </span>
               </div>
-              {business.operating_hours && (
-                <span
-                  className={`text-sm px-3 py-1 rounded-full font-medium ${
-                    isCurrentlyOpen
-                      ? "bg-green-100 text-green-700"
-                      : "bg-red-100 text-red-700"
-                  }`}
-                >
-                  {isCurrentlyOpen ? "Open Now" : "Closed Now"}
-                </span>
-              )}
             </div>
             {business.employee_count && (
               <div className="flex items-center space-x-2">

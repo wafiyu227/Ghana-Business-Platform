@@ -1,15 +1,23 @@
 import { useState, useRef, useEffect } from "react";
-import { Menu, X, Building2, User, ChevronDown } from "lucide-react";
+import {
+  Menu,
+  X,
+  Building2,
+  User,
+  ChevronDown,
+  Home,
+  Grid,
+} from "lucide-react"; // ✅ Add Home & Grid icons
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../../context/AuthContext"; // 🔄
-import { supabase } from "../../supabaseClient"; // 🔄
+import { useAuth } from "../../../context/AuthContext";
+import { supabase } from "../../supabaseClient";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { currentUser, firstName } = useAuth(); // 🔄
+  const { currentUser, firstName } = useAuth();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
-  const navigate = useNavigate(); // 🔄
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -51,15 +59,17 @@ const Header = () => {
           <nav className="hidden md:flex space-x-8 items-center">
             <Link
               to="/"
-              className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-bold transition-colors"
+              className="flex items-center space-x-2 text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-bold transition-colors"
             >
-              Home
+              <Home className="h-4 w-4" /> {/* ✅ Icon for Home */}
+              <span>Home</span>
             </Link>
             <button
               onClick={BrowseCategories}
-              className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-bold transition-colors"
+              className="flex items-center space-x-2 text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-bold transition-colors"
             >
-              Categories
+              <Grid className="h-4 w-4" /> {/* ✅ Icon for Categories */}
+              <span>Categories</span>
             </button>
 
             {!currentUser ? (
@@ -77,46 +87,44 @@ const Header = () => {
                 </Link>
               </>
             ) : (
-              <>
-                <div className="relative" ref={dropdownRef}>
-                  <div
-                    onClick={() => setDropdownOpen(!dropdownOpen)}
-                    className="flex items-center space-x-2 bg-gray-100 px-3 py-1 rounded-full cursor-pointer"
-                  >
-                    <User className="h-4 w-4 text-gray-600" />
-                    <span className="text-sm text-gray-700">{firstName}</span>
-                    <ChevronDown className="h-4 w-4 text-gray-600" />
-                  </div>
-
-                  {dropdownOpen && (
-                    <div className="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg z-50 border">
-                      <Link
-                        to="/dashboard"
-                        onClick={() => setDropdownOpen(false)}
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      >
-                        Dashboard
-                      </Link>
-                      <Link
-                        to="/my-account"
-                        onClick={() => setDropdownOpen(false)}
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      >
-                        My Account
-                      </Link>
-                      <button
-                        onClick={() => {
-                          handleLogout();
-                          setDropdownOpen(false);
-                        }}
-                        className="block w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-gray-100"
-                      >
-                        Logout
-                      </button>
-                    </div>
-                  )}
+              <div className="relative" ref={dropdownRef}>
+                <div
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                  className="flex items-center space-x-2 bg-gray-100 px-3 py-1 rounded-full cursor-pointer"
+                >
+                  <User className="h-4 w-4 text-gray-600" />
+                  <span className="text-sm text-gray-700">{firstName}</span>
+                  <ChevronDown className="h-4 w-4 text-gray-600" />
                 </div>
-              </>
+
+                {dropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg z-50 border">
+                    <Link
+                      to="/dashboard"
+                      onClick={() => setDropdownOpen(false)}
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      Dashboard
+                    </Link>
+                    <Link
+                      to="/my-account"
+                      onClick={() => setDropdownOpen(false)}
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      My Account
+                    </Link>
+                    <button
+                      onClick={() => {
+                        handleLogout();
+                        setDropdownOpen(false);
+                      }}
+                      className="block w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-gray-100"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
             )}
           </nav>
 
