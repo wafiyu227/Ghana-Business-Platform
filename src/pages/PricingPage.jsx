@@ -31,7 +31,7 @@ const PricingPage = () => {
     },
     {
       name: 'Basic',
-      price: isAnnual ? 1000 : 100,
+      price: isAnnual ? 500 : 50,
       period: isAnnual ? 'year' : 'month',
       description: 'Boost your visibility',
       features: [
@@ -49,7 +49,7 @@ const PricingPage = () => {
     },
     {
       name: 'Standard',
-      price: isAnnual ? 2000 : 200,
+      price: isAnnual ? 1000 : 100,
       period: isAnnual ? 'year' : 'month',
       description: 'Grow your customer base',
       features: [
@@ -67,7 +67,7 @@ const PricingPage = () => {
     },
     {
       name: 'Pro',
-      price: isAnnual ? 4000 : 400,
+      price: isAnnual ? 2000 : 200,
       period: isAnnual ? 'year' : 'month',
       description: 'Maximum growth potential',
       features: [

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Check, Star, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom'
 
 const PricingComponent = ({ showHeader = true, maxPlans = 4 }) => {
   const plans = [
@@ -145,9 +146,11 @@ const PricingComponent = ({ showHeader = true, maxPlans = 4 }) => {
         {/* Bottom CTA */}
         <div className="text-center mt-12">
           <div className="inline-flex flex-col sm:flex-row items-center gap-4">
+            <Link to="/pricing">
             <button className="px-6 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white font-semibold rounded-lg hover:from-green-700 hover:to-green-800 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
               View All Features
             </button>
+            </Link>
             <button className="px-6 py-3 border-2 border-green-600 text-green-700 font-semibold rounded-lg hover:bg-green-50 transition-all duration-300">
               Contact Sales
             </button>

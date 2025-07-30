@@ -19,6 +19,7 @@ import HowItWorksPage from "./src/pages/HowItWorksPage";
 import AboutUsPage from "./src/pages/AboutUs";
 import Account from "./src/components/business/Account";
 import PricingPage from './src/pages/PricingPage'
+import AllReviews from './src/components/AllReviews'
 
 
 // Auth
@@ -39,8 +40,9 @@ const AppRoutes = () => {
         <Route path="/featured-business" element={<FeaturedBusinesses />} />
         <Route path="/how-it-works" element={<HowItWorksPage />} />
         <Route path="/about-us" element={<AboutUsPage />} />
-        <Route path="/my-account" element={<Account />} />
+        <Route path="/account-settings" element={<Account />} />
         <Route path="/pricing" element={<PricingPage />} />
+        <Route path="/business/:business_name/reviews" element={<AllReviews />} />
         
 
 

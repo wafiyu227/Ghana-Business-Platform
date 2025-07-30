@@ -6,7 +6,7 @@ import {
   User,
   ChevronDown,
   Home,
-  Grid,
+  Wallet,
 } from "lucide-react"; // ✅ Add Home & Grid icons
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/AuthContext";
@@ -29,10 +29,9 @@ const Header = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  function BrowseCategories() {
-    const categories = document.getElementById("businessCategories");
-    categories?.scrollIntoView({ behavior: "smooth" });
-  }
+const navigatePricingPage = () => {
+  navigate("/pricing")
+}
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -65,11 +64,11 @@ const Header = () => {
               <span>Home</span>
             </Link>
             <button
-              onClick={BrowseCategories}
+              onClick={navigatePricingPage}
               className="flex items-center space-x-2 text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-bold transition-colors"
             >
-              <Grid className="h-4 w-4" /> {/* ✅ Icon for Categories */}
-              <span>Categories</span>
+              <Wallet className="h-4 w-4" /> {/* ✅ Icon for Pricing */}
+              <span>Pricing</span>
             </button>
 
             {!currentUser ? (
@@ -107,7 +106,7 @@ const Header = () => {
                       Dashboard
                     </Link>
                     <Link
-                      to="/my-account"
+                      to="/account-settings"
                       onClick={() => setDropdownOpen(false)}
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
@@ -154,7 +153,7 @@ const Header = () => {
                 Home
               </Link>
               <Link
-                to="/my-account"
+                to="/account-settings"
                 className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-bold"
               >
                 My Account
