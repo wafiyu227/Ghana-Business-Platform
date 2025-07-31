@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import Header from "../components/common/Header";
 import Footer from "../components/common/Footer";
 import { supabase } from "../supabaseClient";
+import { trackEvent } from '../services/analyticsService';
 import {
   Phone,
   MessageCircle,
@@ -46,7 +47,7 @@ export const BusinessProfile = ({
   const [business, setBusiness] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
+
   // Reviews state
   const [reviews, setReviews] = useState([]);
   const [reviewsLoading, setReviewsLoading] = useState(false);
@@ -54,22 +55,21 @@ export const BusinessProfile = ({
   const [reviewStats, setReviewStats] = useState({
     averageRating: 0,
     totalReviews: 0,
-    ratingDistribution: { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 }
+    ratingDistribution: { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 },
   });
-  
-  // Review form state
+
   const [reviewForm, setReviewForm] = useState({
-    reviewer_name: '',
-    reviewer_email: '',
+    reviewer_name: "",
+    reviewer_email: "",
     rating: 0,
-    review_text: ''
+    review_text: "",
   });
   const [submitingReview, setSubmitingReview] = useState(false);
 
-  // Get business identifier from props or URL params
   const currentBusinessId = businessId;
   const currentBusinessName = businessName || business_name;
 
+  // Fetch business
   useEffect(() => {
     if (currentBusinessId) {
       fetchBusinessById(currentBusinessId);
@@ -81,34 +81,27 @@ export const BusinessProfile = ({
     }
   }, [currentBusinessId, currentBusinessName]);
 
+  // Fetch reviews when business is loaded
   useEffect(() => {
     if (business?.id) {
       fetchReviews();
+
+      // 🔹 Track Page View
+      trackEvent(business.id, "page_view");
     }
   }, [business?.id]);
 
   const fetchBusinessById = async (id) => {
     try {
       setLoading(true);
-      setError(null);
-
       const { data, error } = await supabase
         .from("businesses")
         .select("*")
         .eq("id", id)
         .single();
-
-      if (error) {
-        throw error;
-      }
-
-      if (!data) {
-        throw new Error("Business not found");
-      }
-
+      if (error) throw error;
       setBusiness(data);
     } catch (err) {
-      console.error("Error fetching business by ID:", err);
       setError(err.message || "Failed to load business data");
     } finally {
       setLoading(false);
@@ -118,27 +111,15 @@ export const BusinessProfile = ({
   const fetchBusinessByName = async (name) => {
     try {
       setLoading(true);
-      setError(null);
-
       const decodedName = decodeURIComponent(name);
-
       const { data, error } = await supabase
         .from("businesses")
         .select("*")
         .ilike("business_name", `%${decodedName}%`)
         .single();
-
-      if (error) {
-        throw error;
-      }
-
-      if (!data) {
-        throw new Error("Business not found");
-      }
-
+      if (error) throw error;
       setBusiness(data);
     } catch (err) {
-      console.error("Error fetching business by name:", err);
       setError(err.message || "Failed to load business data");
     } finally {
       setLoading(false);
@@ -148,32 +129,26 @@ export const BusinessProfile = ({
   const fetchReviews = async () => {
     try {
       setReviewsLoading(true);
-      
-      // Fetch reviews with limit for preview
-      const { data: reviewsData, error: reviewsError } = await supabase
+      const { data: reviewsData } = await supabase
         .from("reviews")
         .select("*")
         .eq("business_id", business.id)
         .order("created_at", { ascending: false })
         .limit(3);
 
-      if (reviewsError) throw reviewsError;
-
-      // Fetch review statistics
-      const { data: statsData, error: statsError } = await supabase
+      const { data: statsData } = await supabase
         .from("reviews")
         .select("rating")
         .eq("business_id", business.id);
 
-      if (statsError) throw statsError;
-
       setReviews(reviewsData || []);
-      
-      // Calculate review statistics
+
       if (statsData && statsData.length > 0) {
         const totalReviews = statsData.length;
-        const averageRating = statsData.reduce((sum, review) => sum + review.rating, 0) / totalReviews;
-        
+        const averageRating =
+          statsData.reduce((sum, review) => sum + review.rating, 0) /
+          totalReviews;
+
         const ratingDistribution = statsData.reduce((acc, review) => {
           acc[review.rating] = (acc[review.rating] || 0) + 1;
           return acc;
@@ -182,7 +157,7 @@ export const BusinessProfile = ({
         setReviewStats({
           averageRating: Math.round(averageRating * 10) / 10,
           totalReviews,
-          ratingDistribution
+          ratingDistribution,
         });
       }
     } catch (err) {
@@ -192,67 +167,30 @@ export const BusinessProfile = ({
     }
   };
 
-  const submitReview = async (e) => {
-    e.preventDefault();
-    if (!business?.id || !reviewForm.reviewer_name || !reviewForm.rating) {
-      return;
-    }
-
-    try {
-      setSubmitingReview(true);
-      
-      const { data, error } = await supabase
-        .from("reviews")
-        .insert([{
-          business_id: business.id,
-          reviewer_name: reviewForm.reviewer_name.trim(),
-          reviewer_email: reviewForm.reviewer_email.trim() || null,
-          rating: reviewForm.rating,
-          review_text: reviewForm.review_text.trim() || null
-        }]);
-
-      if (error) throw error;
-
-      // Reset form and close modal
-      setReviewForm({
-        reviewer_name: '',
-        reviewer_email: '',
-        rating: 0,
-        review_text: ''
-      });
-      setShowReviewModal(false);
-      
-      // Refresh reviews
-      fetchReviews();
-      
-    } catch (err) {
-      console.error("Error submitting review:", err);
-      alert("Failed to submit review. Please try again.");
-    } finally {
-      setSubmitingReview(false);
-    }
-  };
-
+  // Handle Click Actions with Tracking
   const handleWhatsAppClick = () => {
-    const number = business?.contact;
-    if (number) {
-      window.open(`https://wa.me/${number.replace(/\D/g, "")}`, "_blank");
+    if (business?.id) trackEvent(business.id, "whatsapp_click");
+    if (business?.contact) {
+      window.open(`https://wa.me/${business.contact.replace(/\D/g, "")}`, "_blank");
     }
   };
 
   const handleCallClick = () => {
+    if (business?.id) trackEvent(business.id, "contact_click");
     if (business?.contact) {
       window.location.href = `tel:${business.contact}`;
     }
   };
 
   const handleEmailClick = () => {
+    if (business?.id) trackEvent(business.id, "contact_click");
     if (business?.email) {
       window.location.href = `mailto:${business.email}`;
     }
   };
 
   const handleShare = () => {
+    if (business?.id) trackEvent(business.id, "profile_share");
     if (navigator.share) {
       navigator.share({
         title: business?.business_name || "Business Profile",
@@ -269,6 +207,7 @@ export const BusinessProfile = ({
     setIsFavorited(!isFavorited);
     if (onFavorite) onFavorite(business);
   };
+
 
   const getServices = () => {
     if (!business?.business_services) return [];
