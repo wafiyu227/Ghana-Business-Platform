@@ -20,6 +20,7 @@ import AboutUsPage from "./src/pages/AboutUs";
 import Account from "./src/components/business/Account";
 import PricingPage from './src/pages/PricingPage'
 import AllReviews from './src/components/AllReviews'
+import SupportPage from './src/pages/support'
 
 
 // Auth
@@ -43,6 +44,7 @@ const AppRoutes = () => {
         <Route path="/account-settings" element={<Account />} />
         <Route path="/pricing" element={<PricingPage />} />
         <Route path="/business/:business_name/reviews" element={<AllReviews />} />
+        <Route path="/support" element={<SupportPage />} />
         
 
 

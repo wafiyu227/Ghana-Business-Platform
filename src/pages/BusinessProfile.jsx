@@ -167,6 +167,47 @@ export const BusinessProfile = ({
     }
   };
 
+  const submitReview = async (e) => {
+    e.preventDefault();
+    if (!business?.id || !reviewForm.reviewer_name || !reviewForm.rating) {
+      return;
+    }
+
+    try {
+      setSubmitingReview(true);
+      
+      const { data, error } = await supabase
+        .from("reviews")
+        .insert([{
+          business_id: business.id,
+          reviewer_name: reviewForm.reviewer_name.trim(),
+          reviewer_email: reviewForm.reviewer_email.trim() || null,
+          rating: reviewForm.rating,
+          review_text: reviewForm.review_text.trim() || null
+        }]);
+
+      if (error) throw error;
+
+      // Reset form and close modal
+      setReviewForm({
+        reviewer_name: '',
+        reviewer_email: '',
+        rating: 0,
+        review_text: ''
+      });
+      setShowReviewModal(false);
+      
+      // Refresh reviews
+      fetchReviews();
+      
+    } catch (err) {
+      console.error("Error submitting review:", err);
+      alert("Failed to submit review. Please try again.");
+    } finally {
+      setSubmitingReview(false);
+    }
+  };
+
   // Handle Click Actions with Tracking
   const handleWhatsAppClick = () => {
     if (business?.id) trackEvent(business.id, "whatsapp_click");
