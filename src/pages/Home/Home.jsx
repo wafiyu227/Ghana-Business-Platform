@@ -4,7 +4,7 @@ import SearchComponent from "../../components/common/SearchComponent";
 import Footer from "../../components/common/Footer";
 import React from "react";
 import FeaturedBusinesses from "./FeaturedBusinesses";
-import BrowseByCategory from './BrowseByCategory'
+import CategorySection from './CategorySection'
 import PricingComponent from './pricing'
 
 function Home() {
@@ -15,7 +15,7 @@ function Home() {
       <SearchComponent />
       <FeaturedBusinesses />
       <PricingComponent />
-      <BrowseByCategory />
+      <CategorySection />
       <Footer />
     </>
   );

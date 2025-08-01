@@ -1,25 +1,16 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import {
-  Search,
-  MapPin,
-  Building2,
-  Users,
-  Clock,
-  Phone,
-  Mail,
-  MessageCircle,
-  Eye,
-} from "lucide-react";
-import { supabase } from "../../supabaseClient";
+import { useState } from "react"
+import { Link, useNavigate } from "react-router-dom"
+import { Search, MapPin, Building2, Users, Clock, Phone, Mail, MessageCircle, Eye, ArrowRight } from "lucide-react"
+import { supabase } from "../../supabaseClient"
 
 const SearchComponent = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [location, setLocation] = useState("");
-  const [category, setCategory] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [searchQuery, setSearchQuery] = useState("")
+  const [location, setLocation] = useState("")
+  const [category, setCategory] = useState("")
+  const [searchResults, setSearchResults] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState("")
+  const navigate = useNavigate()
 
   const categories = [
     "All Categories",
@@ -38,7 +29,7 @@ const SearchComponent = () => {
     "Professional Services",
     "Entertainment",
     "Health & Beauty",
-  ];
+  ]
 
   const locations = [
     "All Locations",
@@ -91,86 +82,74 @@ const SearchComponent = () => {
     "Damongo",
     "Buipe",
     "Bole",
-  ];
-
-  // Note: You'll need to import supabase client
-  // import { supabase } from "../../supabaseClient";
+  ]
 
   const handleSearch = async () => {
-    setLoading(true);
-    setError("");
+    setLoading(true)
+    setError("")
     try {
-      // Start building the query - select all needed columns
       let query = supabase
         .from("businesses")
         .select(
-          "id, business_name, industry, region, district, town, physical_address, contact, email, business_description, employee_count, operating_hours"
-        );
+          "id, business_name, industry, region, district, town, physical_address, contact, email, business_description, employee_count, operating_hours",
+        )
 
-      // Search in business name (case-insensitive partial match)
       if (searchQuery.trim() !== "") {
-        query = query.ilike("business_name", `%${searchQuery.trim()}%`);
+        query = query.ilike("business_name", `%${searchQuery.trim()}%`)
       }
 
-      // Search in location fields (region, district, or town)
       if (location && location !== "All Locations") {
-        query = query.or(
-          `region.ilike.%${location}%,district.ilike.%${location}%,town.ilike.%${location}%`
-        );
+        query = query.or(`region.ilike.%${location}%,district.ilike.%${location}%,town.ilike.%${location}%`)
       }
 
-      // Search by industry (exact match, but case-insensitive)
       if (category && category !== "All Categories") {
-        query = query.ilike("industry", category);
+        query = query.ilike("industry", category)
       }
 
-      // Execute the query
-      const { data, error } = await query;
+      const { data, error } = await query
 
       if (error) {
-        setError("Failed to fetch businesses. Please try again.");
-        console.error("Search error:", error);
+        setError("Failed to fetch businesses. Please try again.")
+        console.error("Search error:", error)
       } else {
-        setSearchResults(data || []);
+        setSearchResults(data || [])
       }
     } catch (err) {
-      console.error(err);
-      setError("An unexpected error occurred. Please try again.");
+      console.error(err)
+      setError("An unexpected error occurred. Please try again.")
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
-  // Helper function to format location display
   const formatLocation = (business) => {
-    const locationParts = [
-      business.town,
-      business.district,
-      business.region,
-    ].filter(Boolean);
-    return locationParts.join(", ") || "Location not specified";
-  };
+    const locationParts = [business.town, business.district, business.region].filter(Boolean)
+    return locationParts.join(", ") || "Location not specified"
+  }
 
-  // Helper function to handle popular search clicks
   const handlePopularSearch = (searchTerm) => {
-    setSearchQuery(searchTerm);
-    // You might want to automatically trigger search here
-    // handleSearch();
-  };
+    setSearchQuery(searchTerm)
+  }
+
+  const handleViewAllBusinesses = () => {
+    const searchParams = new URLSearchParams({
+      query: searchQuery,
+      location: location,
+      category: category,
+    })
+    navigate(`/search-results?${searchParams.toString()}`)
+  }
+
+  // Show only first 3 results in the component
+  const displayedResults = searchResults.slice(0, 3)
+  const hasMoreResults = searchResults.length > 3
 
   return (
-    <div
-      className="bg-gradient-to-r from-blue-50 to-gray-50 py-8"
-      id="findBusinesses"
-    >
+    <div className="bg-gradient-to-r from-blue-50 to-gray-50 py-8" id="findBusinesses">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-6">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">
-            Find Local Businesses
-          </h2>
-          <p className="text-gray-600 text-lg">
-            Discover amazing businesses in your area
-          </p>
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">Find Local Businesses</h2>
+          <p className="text-gray-600 text-lg">Discover amazing businesses in your area</p>
         </div>
 
         <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
@@ -186,7 +165,7 @@ const SearchComponent = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                onKeyPress={(e) => e.key === "Enter" && handleSearch()}
+                onKeyUp={(e) => e.key === "Enter" && handleSearch()}
               />
             </div>
 
@@ -241,14 +220,7 @@ const SearchComponent = () => {
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600 mb-2">Popular searches:</p>
             <div className="flex flex-wrap justify-center gap-2">
-              {[
-                "Restaurants",
-                "Hair Salons",
-                "Mechanic",
-                "Pharmacy",
-                "Schools",
-                "Hotels",
-              ].map((term, index) => (
+              {["Restaurants", "Hair Salons", "Mechanic", "Pharmacy", "Schools", "Hotels"].map((term, index) => (
                 <button
                   key={index}
                   onClick={() => handlePopularSearch(term)}
@@ -273,13 +245,14 @@ const SearchComponent = () => {
               <p className="text-gray-600 mb-4 text-center">
                 Found {searchResults.length} business
                 {searchResults.length !== 1 ? "es" : ""}
+                {hasMoreResults && " (showing first 3)"}
               </p>
             )}
 
             {/* Search Results */}
-            {!loading && searchResults.length > 0 && (
+            {!loading && displayedResults.length > 0 && (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
-                {searchResults.map((business) => (
+                {displayedResults.map((business) => (
                   <div
                     key={business.id}
                     className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 hover:border-blue-300 hover:-translate-y-1"
@@ -287,14 +260,10 @@ const SearchComponent = () => {
                     {/* Business Header */}
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex-1">
-                        <h3 className="font-bold text-lg text-gray-900 mb-1 line-clamp-2">
-                          {business.business_name}
-                        </h3>
+                        <h3 className="font-bold text-lg text-gray-900 mb-1 line-clamp-2">{business.business_name}</h3>
                         <div className="flex items-center text-blue-600 text-sm mb-2">
                           <Building2 className="h-4 w-4 mr-1" />
-                          <span>
-                            {business.industry || "Industry not specified"}
-                          </span>
+                          <span>{business.industry || "Industry not specified"}</span>
                         </div>
                       </div>
                     </div>
@@ -302,16 +271,12 @@ const SearchComponent = () => {
                     {/* Location */}
                     <div className="flex items-center text-gray-600 text-sm mb-3">
                       <MapPin className="h-4 w-4 mr-1 flex-shrink-0" />
-                      <span className="line-clamp-1">
-                        {formatLocation(business)}
-                      </span>
+                      <span className="line-clamp-1">{formatLocation(business)}</span>
                     </div>
 
                     {/* Description */}
                     {business.business_description && (
-                      <p className="text-gray-700 text-sm mb-3 line-clamp-2">
-                        {business.business_description}
-                      </p>
+                      <p className="text-gray-700 text-sm mb-3 line-clamp-2">{business.business_description}</p>
                     )}
 
                     {/* Additional Info */}
@@ -336,8 +301,7 @@ const SearchComponent = () => {
                       <Link to={`/business/${business.business_name}`}>
                         <button
                           onClick={() => {
-                            // Handle view business profile
-                            console.log("View business profile:", business.id);
+                            console.log("View business profile:", business.id)
                           }}
                           className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 px-4 rounded-lg text-sm font-medium transition-colors flex items-center justify-center shadow-sm hover:shadow-md"
                         >
@@ -351,7 +315,7 @@ const SearchComponent = () => {
                         {business.contact && (
                           <button
                             onClick={() => {
-                              window.open(`tel:${business.contact}`, "_self");
+                              window.open(`tel:${business.contact}`, "_self")
                             }}
                             className="bg-green-50 hover:bg-green-100 text-green-700 hover:text-green-800 border border-green-200 hover:border-green-300 py-2 px-2 rounded-lg text-xs font-medium transition-all flex items-center justify-center"
                             title="Call business"
@@ -360,16 +324,15 @@ const SearchComponent = () => {
                             Call
                           </button>
                         )}
-
                         {business.contact && (
                           <button
                             onClick={() => {
-                              const message = `Hi! I found your business "${business.business_name}" and I'm interested in your services.`;
+                              const message = `Hi! I found your business "${business.business_name}" and I'm interested in your services.`
                               const whatsappUrl = `https://wa.me/${business.contact.replace(
                                 /[^0-9]/g,
-                                ""
-                              )}?text=${encodeURIComponent(message)}`;
-                              window.open(whatsappUrl, "_blank");
+                                "",
+                              )}?text=${encodeURIComponent(message)}`
+                              window.open(whatsappUrl, "_blank")
                             }}
                             className="bg-green-500 hover:bg-green-600 text-white py-2 px-2 rounded-lg text-xs font-medium transition-colors flex items-center justify-center shadow-sm"
                             title="WhatsApp business"
@@ -378,20 +341,17 @@ const SearchComponent = () => {
                             WhatsApp
                           </button>
                         )}
-
                         {business.email && (
                           <button
                             onClick={() => {
-                              const subject = `Inquiry about ${business.business_name}`;
-                              const body = `Hi,\n\nI found your business "${business.business_name}" and I'm interested in learning more about your services.\n\nBest regards`;
+                              const subject = `Inquiry about ${business.business_name}`
+                              const body = `Hi,\n\nI found your business "${business.business_name}" and I'm interested in learning more about your services.\n\nBest regards`
                               window.open(
-                                `mailto:${
-                                  business.email
-                                }?subject=${encodeURIComponent(
-                                  subject
+                                `mailto:${business.email}?subject=${encodeURIComponent(
+                                  subject,
                                 )}&body=${encodeURIComponent(body)}`,
-                                "_self"
-                              );
+                                "_self",
+                              )
                             }}
                             className="bg-gray-50 hover:bg-gray-100 text-gray-700 hover:text-gray-800 border border-gray-200 hover:border-gray-300 py-2 px-2 rounded-lg text-xs font-medium transition-all flex items-center justify-center"
                             title="Email business"
@@ -405,14 +365,25 @@ const SearchComponent = () => {
                       {/* Contact Info Display */}
                       {!business.contact && !business.email && (
                         <div className="text-center py-2">
-                          <p className="text-gray-500 text-xs">
-                            Contact information not available
-                          </p>
+                          <p className="text-gray-500 text-xs">Contact information not available</p>
                         </div>
                       )}
                     </div>
                   </div>
                 ))}
+              </div>
+            )}
+
+            {/* View All Businesses Button */}
+            {!loading && hasMoreResults && (
+              <div className="mt-6 text-center">
+                <button
+                  onClick={handleViewAllBusinesses}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center space-x-2 mx-auto shadow-sm hover:shadow-md"
+                >
+                  <span>View All {searchResults.length} Businesses</span>
+                  <ArrowRight className="h-5 w-5" />
+                </button>
               </div>
             )}
 
@@ -422,19 +393,15 @@ const SearchComponent = () => {
                 <div className="text-gray-400 mb-4">
                   <Search className="h-16 w-16 mx-auto" />
                 </div>
-                <p className="text-gray-600 text-lg">
-                  No businesses found matching your search.
-                </p>
-                <p className="text-gray-500 text-sm mt-2">
-                  Try adjusting your search terms or location.
-                </p>
+                <p className="text-gray-600 text-lg">No businesses found matching your search.</p>
+                <p className="text-gray-500 text-sm mt-2">Try adjusting your search terms or location.</p>
               </div>
             )}
           </div>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SearchComponent;
+export default SearchComponent

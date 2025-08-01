@@ -21,6 +21,7 @@ import Account from "./src/components/business/Account";
 import PricingPage from './src/pages/PricingPage'
 import AllReviews from './src/components/AllReviews'
 import SupportPage from './src/pages/support'
+import SearchResultsPage from "./src/pages/SearchResults";
 
 
 // Auth
@@ -45,6 +46,7 @@ const AppRoutes = () => {
         <Route path="/pricing" element={<PricingPage />} />
         <Route path="/business/:business_name/reviews" element={<AllReviews />} />
         <Route path="/support" element={<SupportPage />} />
+        <Route path="/search-results" element={<SearchResultsPage />} />
         
 
 

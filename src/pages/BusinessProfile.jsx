@@ -521,7 +521,6 @@ export const BusinessProfile = ({
               { id: "services", label: "Services" },
               { id: "reviews", label: `Reviews (${reviewStats.totalReviews})` },
               { id: "contact", label: "Contact" },
-              { id: "about", label: "About" },
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -956,72 +955,6 @@ export const BusinessProfile = ({
                   </div>
                 </div>
               )}
-            </div>
-          )}
-
-          {activeTab === "about" && (
-            <div className="space-y-6">
-              <div>
-                <h3 className="text-xl font-semibold mb-4">
-                  Business Information
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-4">
-                    <div className="p-4 bg-gray-50 rounded-xl">
-                      <h4 className="font-medium mb-2">Business Type</h4>
-                      <p className="text-gray-600">
-                        {business.industry || "Not specified"}
-                      </p>
-                    </div>
-
-                    {business.employee_count && (
-                      <div className="p-4 bg-gray-50 rounded-xl">
-                        <h4 className="font-medium mb-2">Team Size</h4>
-                        <p className="text-gray-600">
-                          {business.employee_count} employees
-                        </p>
-                      </div>
-                    )}
-
-                    {business.operating_hours && (
-                      <div className="p-4 bg-gray-50 rounded-xl">
-                        <h4 className="font-medium mb-2">Operating Hours</h4>
-                        <p className="text-gray-600">
-                          {business.operating_hours}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="space-y-4">
-                    <div className="p-4 bg-gray-50 rounded-xl">
-                      <h4 className="font-medium mb-2">Location</h4>
-                      <p className="text-gray-600">
-                        {business.district || "Not specified"}
-                      </p>
-                      <p className="text-sm text-gray-500">
-                        {business.region || "Not specified"}
-                      </p>
-                    </div>
-
-                    {business.town && (
-                      <div className="p-4 bg-gray-50 rounded-xl">
-                        <h4 className="font-medium mb-2">Town/City</h4>
-                        <p className="text-gray-600">{business.town}</p>
-                      </div>
-                    )}
-
-                    {business.physical_address && (
-                      <div className="p-4 bg-gray-50 rounded-xl">
-                        <h4 className="font-medium mb-2">Address</h4>
-                        <p className="text-gray-600">
-                          {business.physical_address}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
             </div>
           )}
         </div>
